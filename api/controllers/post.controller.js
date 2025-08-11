@@ -319,13 +319,25 @@ export const deletePost = async (req, res, next) => {
   }
 };
 
-export const getTopViewedPost = async (req, res, next) => {
+export const getTopViewedPosts = async (req, res, next) => {
   try {
-    const post = await Post.findOne().sort({ views: -1 }).limit(1);
-    if (!post) {
-      return nexr(errorHandler(404, "Post not found!"));
+    const posts = await Post.find().sort({ views: -1 }).limit(3);
+    if (!posts) {
+      return nexr(errorHandler(404, "Top viewed Posts not found!"));
     }
-    res.status(200).json(post);
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTopCommentsPosts = async (req, res, next) => {
+  try {
+    const posts = await Post.find().sort({ commentsCount: -1 }).limit(3);
+    if (!posts) {
+      return nexr(errorHandler(404, "Top Comments Posts not found!"));
+    }
+    res.status(200).json(posts);
   } catch (error) {
     next(error);
   }

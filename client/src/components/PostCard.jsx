@@ -5,7 +5,7 @@ import { FiEdit } from "react-icons/fi";
 
 export default function PostCard({ post }) {
   return (
-    <div className="bg-gray-300 group relative h-[370px] w-[350px] border border-gray-500 hover:border-2 overflow-hidden rounded-lg transition-all mx-auto">
+    <div className="bg-gray-300 group relative h-[370px] md:w-[350px] w-[310px] border border-gray-500 hover:border-2 overflow-hidden rounded-lg transition-all">
       <Link to={`/post/${post.slug}`}>
         <img
           src={post.image}
@@ -18,7 +18,7 @@ export default function PostCard({ post }) {
           <p className="text-lg font-semibold line-clamp-1 text-gray-800 truncate">
             {post.title.length > 35
               ? `${post.title.slice(0, 35)}...`
-              : post.title} 
+              : post.title}
           </p>
           <span className="text-xs text-gray-600">{post.views} Views</span>
         </div>

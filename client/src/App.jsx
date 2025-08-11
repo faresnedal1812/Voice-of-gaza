@@ -24,12 +24,12 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/post/:postSlug" element={<PostPage />} />
         </Route>
         <Route element={<WriterOnlyPrivateRoute />}>
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
-        <Route path="/post/:postSlug" element={<PostPage />} />
       </Routes>
       <FooterComp />
     </BrowserRouter>

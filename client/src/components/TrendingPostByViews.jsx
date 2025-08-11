@@ -16,7 +16,7 @@ export default function TrendingPostByViews() {
         if (!res.ok) {
           return;
         }
-        setTrendingPostByViews(data);
+        setTrendingPostByViews(data[0]);
       } catch (error) {
         console.log(error.message);
       }
