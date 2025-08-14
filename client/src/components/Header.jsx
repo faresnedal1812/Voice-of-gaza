@@ -13,10 +13,10 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  Select,
   Textarea,
   Spinner,
   Alert,
+  Label,
 } from "flowbite-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -44,7 +44,12 @@ export default function Header() {
   const [requestRoleError, setRequestRoleError] = useState(null);
   const [requestRoleSuccess, setRequestRoleSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(message);
+  const [showModalOfContactUs, setShowModalOfContactUs] = useState(false);
+  const [formData, setFormData] = useState({
+    email: currentUser && currentUser.email,
+  });
+
+  // console.log(message);
   // console.log(location.pathname, location.search);
 
   useEffect(() => {
@@ -96,8 +101,9 @@ export default function Header() {
         console.log("Failed to load notifications", error);
       }
     };
-
-    fetchNotifications();
+    if (currentUser) {
+      fetchNotifications();
+    }
   }, [currentUser, location.pathname]);
 
   // console.log(notifications, unreadCount);
@@ -183,6 +189,21 @@ export default function Header() {
       setRequestRoleError(error.message);
       setLoading(false);
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmitContactUs = (e) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(
+      `Feedback from ${formData.name} about Voice of Gaza Website`
+    );
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`
+    );
+    window.location.href = `mailto:nedalfares53@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -336,8 +357,12 @@ export default function Header() {
         <NavbarLink as={"div"} active={path === "/about"}>
           <Link to={"/about"}>About</Link>
         </NavbarLink>
-        <NavbarLink as={"div"} active={path === "/posts"}>
-          <Link to={"/posts"}>Posts</Link>
+        <NavbarLink
+          className="cursor-pointer"
+          onClick={() => setShowModalOfContactUs((prev) => !prev)}
+          as={"div"}
+        >
+          Contact Us
         </NavbarLink>
         {currentUser?.role === "reader" && (
           <NavbarLink
@@ -395,6 +420,69 @@ export default function Header() {
           </ModalBody>
         </Modal>
       )}
+      <Modal
+        show={showModalOfContactUs}
+        size="lg"
+        popup
+        onClose={() => setShowModalOfContactUs(false)}
+      >
+        <ModalHeader className="bg-slate-700" />
+        <ModalBody className="bg-slate-700 text-center flex flex-col gap-4">
+          <h1 className="text-white font-semibold text-3xl">Contact Us</h1>
+          <p className="text-white text-sm">
+            Hava questions or feedback? Get in touch with us.
+          </p>
+          <form
+            onSubmit={handleSubmitContactUs}
+            className="bg-slate-600 rounded-lg text-start p-3 flex flex-col gap-2"
+          >
+            <div className="flex flex-col gap-2">
+              <Label className="text-white ml-1">Name</Label>
+              <TextInput
+                type="text"
+                id="name"
+                placeholder="Enter your name..."
+                color="info"
+                className="text-teal-900 rounded-none border-none outline-none"
+                required
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label className="text-white ml-1">Email</Label>
+              <TextInput
+                type="email"
+                id="email"
+                placeholder="Enter your email..."
+                color="info"
+                className="text-teal-900 rounded-none border-none outline-none"
+                defaultValue={currentUser && currentUser.email}
+                required
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label className="text-white ml-1">Message</Label>
+              <Textarea
+                type="message"
+                id="message"
+                placeholder="Enter your message..."
+                rows={4}
+                color="info"
+                className="text-teal-900 border-none outline-none rounded-lg"
+                required
+                onChange={handleChange}
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-br from-green-400 to-blue-600 text-white hover:bg-gradient-to-bl focus:ring-green-200 dark:focus:ring-green-800"
+            >
+              Send
+            </Button>
+          </form>
+        </ModalBody>
+      </Modal>
     </Navbar>
   );
 }

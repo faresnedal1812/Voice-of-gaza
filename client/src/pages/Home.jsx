@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import HeroSection from "../components/HeroSection";
 import PostCard from "./../components/PostCard";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const [latestPosts, setLatestPosts] = useState([]);
   const [topViewedPosts, setTopViewedPosts] = useState([]);
   const [topCommentedPosts, setTopCommentedPosts] = useState([]);
   console.log(latestPosts, topViewedPosts, topCommentedPosts);
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchLatestPost = async () => {
@@ -58,44 +60,46 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
-      <div className="p-3 flex flex-col gap-6 py-7">
-        {latestPosts && latestPosts.length > 0 && (
-          <div className="flex flex-col gap-4 w-full mx-auto">
-            <h1 className="font-semibold text-2xl text-center text-gray-700 italic">
-              Recent Posts:
-            </h1>
-            <div className="flex flex-wrap gap-4 items-start justify-center">
-              {latestPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
-              ))}
+      {currentUser && (
+        <div className={"p-3 flex flex-col gap-6 my-7"}>
+          {latestPosts && latestPosts.length > 0 && (
+            <div className="flex flex-col gap-4 w-full mx-auto">
+              <h1 className="font-semibold text-2xl text-center text-gray-700 italic">
+                Recent Posts:
+              </h1>
+              <div className="flex flex-wrap gap-4 items-start justify-center">
+                {latestPosts.map((post) => (
+                  <PostCard key={post._id} post={post} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {topViewedPosts && topViewedPosts.length > 0 && (
-          <div className="flex flex-col gap-4 w-full mx-auto">
-            <h1 className="font-semibold text-2xl text-center text-gray-700">
-              Top Viewed Posts:
-            </h1>
-            <div className="flex flex-wrap gap-4 items-start justify-center">
-              {topViewedPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
-              ))}
+          )}
+          {topViewedPosts && topViewedPosts.length > 0 && (
+            <div className="flex flex-col gap-4 w-full mx-auto">
+              <h1 className="font-semibold text-2xl text-center text-gray-700">
+                Top Viewed Posts:
+              </h1>
+              <div className="flex flex-wrap gap-4 items-start justify-center">
+                {topViewedPosts.map((post) => (
+                  <PostCard key={post._id} post={post} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {topCommentedPosts && topCommentedPosts.length > 0 && (
-          <div className="flex flex-col gap-4 w-full mx-auto">
-            <h1 className="font-semibold text-2xl text-center text-gray-700">
-              Top Commented Posts:
-            </h1>
-            <div className="flex flex-wrap gap-4 items-start justify-center">
-              {topCommentedPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
-              ))}
+          )}
+          {topCommentedPosts && topCommentedPosts.length > 0 && (
+            <div className="flex flex-col gap-4 w-full mx-auto">
+              <h1 className="font-semibold text-2xl text-center text-gray-700">
+                Top Commented Posts:
+              </h1>
+              <div className="flex flex-wrap gap-4 items-start justify-center">
+                {topCommentedPosts.map((post) => (
+                  <PostCard key={post._id} post={post} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
