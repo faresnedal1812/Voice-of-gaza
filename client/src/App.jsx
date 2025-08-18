@@ -8,10 +8,10 @@ import Header from "./components/Header";
 import FooterComp from "./components/FooterComp";
 import PrivateRoute from "./components/PrivateRoute";
 import CreatePost from "./pages/CreatePost";
-import WriterOnlyPrivateRoute from "./components/WriterOnlyPrivateRoute";
 import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
 import Search from "./pages/Search";
+import AdminAndWriterOnlyPrivateRoute from "./components/AdminAndWriterOnlyPrivateRoute";
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/post/:postSlug" element={<PostPage />} />
         </Route>
-        <Route element={<WriterOnlyPrivateRoute />}>
+        <Route element={<AdminAndWriterOnlyPrivateRoute />}>
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>

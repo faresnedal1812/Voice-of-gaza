@@ -47,7 +47,7 @@ const keywords = [
 ];
 
 export const createPost = async (req, res, next) => {
-  if (req.user.role !== "writer") {
+  if (req.user.role !== "writer" && req.user.role !== "admin") {
     return next(errorHandler(401, "You are not allowed to create post!"));
   }
   if (req.body.title && req.body.title.length < 8) {
@@ -109,7 +109,10 @@ export const createPost = async (req, res, next) => {
 };
 
 export const updatePost = async (req, res, next) => {
-  if (req.user.role !== "writer" || req.user.id !== req.params.userId) {
+  if (
+    (req.user.role !== "writer" || req.user.id !== req.params.userId) &&
+    req.user.role !== "admin"
+  ) {
     return next(errorHandler(401, "You are not allowed to update this post!"));
   }
   if (req.body.title && req.body.title.length < 8) {

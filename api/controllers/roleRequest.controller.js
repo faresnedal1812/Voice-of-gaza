@@ -41,6 +41,20 @@ export const createRequestRole = async (req, res, next) => {
     });
     await newRoleRequest.save();
 
+    const userThatSendRequest = await User.findById(userId);
+    const adminUsers = await User.find({ role: "admin" });
+    // console.log(adminUsers);
+
+    for (const admin of adminUsers) {
+      console.log(admin._id);
+      await Notification.create({
+        sender: userId,
+        receiver: admin._id,
+        type: "Role request",
+        message: `${userThatSendRequest.username} request to change his role from reader to writer.`,
+      });
+    }
+
     res
       .status(201)
       .json({ message: "Your role request has been submitted successfully." });

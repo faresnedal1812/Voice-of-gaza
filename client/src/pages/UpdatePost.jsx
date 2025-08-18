@@ -3,19 +3,23 @@ import {
   TextInput,
   FileInput,
   Button,
-  Textarea,
   Spinner,
   Alert,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
 export default function UpdatePost() {
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "Uncatigorized",
+    image: "",
+    content: "",
+  });
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
@@ -25,9 +29,14 @@ export default function UpdatePost() {
   const [error, setError] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const { postId } = useParams();
+  const navigate = useNavigate();
+
+  console.log(formData);
 
   useEffect(() => {
     const fetchPostData = async () => {
+      setError(false);
+      setImageUploadError(false);
       try {
         const res = await fetch(`/api/post/getPosts?postId=${postId}`);
         const data = await res.json();
@@ -144,6 +153,7 @@ export default function UpdatePost() {
       if (res.ok) {
         setLoading(false);
         setError(false);
+        navigate(`/post/${data.slug}`);
       }
     } catch (error) {
       setError(error.message);
@@ -170,7 +180,7 @@ export default function UpdatePost() {
         >
           <div className="flex flex-col sm:flex-row gap-2">
             <TextInput
-              value={formData?.title || ""}
+              value={formData?.title}
               className="flex-1"
               type="text"
               placeholder="Title..."
@@ -180,7 +190,7 @@ export default function UpdatePost() {
               }
             />
             <Select
-              value={formData?.category || "Uncatigorized"}
+              value={formData?.category}
               addon="&#9998;"
               onChange={(e) =>
                 setFormData({ ...formData, category: e.target.value })
@@ -239,7 +249,7 @@ export default function UpdatePost() {
                   setFormData((prev) =>
                     setFormData({
                       ...prev,
-                      image: "",
+                      image: "https://img.freepik.com/free-photo/technology-communication-icons-symbols-concept_53876-120314.jpg?ga=GA1.1.131351233.1739735698&semt=ais_hybrid&w=740",
                     })
                   );
                 }}
@@ -253,9 +263,9 @@ export default function UpdatePost() {
             id="content"
             value={formData?.content || ""}
             className="h-72 mb-12"
-            onChange={(value) => {
-              setFormData({ ...formData, content: value });
-            }}
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, content: value }))
+            }
           />
           {/* <Textarea
             value={formData?.content || ""}

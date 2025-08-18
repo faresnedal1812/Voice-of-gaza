@@ -399,7 +399,8 @@ export default function DashProfile() {
           )}
         </form>
         <div className="w-full max-w-7xl mx-auto">
-          {currentUser?.role === "writer" && (
+          {(currentUser?.role === "writer" ||
+            currentUser?.role === "admin") && (
             <div className="my-7 flex justify-center">
               <ButtonGroup outline>
                 {posts.length > 0 && (

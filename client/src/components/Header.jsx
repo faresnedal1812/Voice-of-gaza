@@ -166,7 +166,7 @@ export default function Header() {
     setRequestRoleError(null);
     try {
       const res = await fetch(
-        `/api/roleRequest//request-role/${currentUser._id}`,
+        `/api/roleRequest/request-role/${currentUser._id}`,
         {
           method: "POST",
           headers: {
@@ -281,7 +281,7 @@ export default function Header() {
                         moment(notification.createdAt).fromNow().slice(1)}
                     </span>
                     <div className="flex items-center justify-between w-full">
-                      <span className="bg-teal-500 px-2 py-1 rounded-xl text-white font-medium">
+                      <span className="bg-teal-500 px-2 py-1 rounded-xl text-white font-medium text-xs">
                         {notification.type}
                       </span>
                       {notification.isRead ? (
@@ -379,7 +379,11 @@ export default function Header() {
           show={showModal}
           size="lg"
           popup
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setRequestRoleError(false);
+            setRequestRoleSuccess();
+          }}
         >
           <ModalHeader />
           <ModalBody className="text-center flex flex-col gap-4">

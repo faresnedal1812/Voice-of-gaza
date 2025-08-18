@@ -11,6 +11,7 @@ import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const [formData, setFormData] = useState(null);
@@ -22,6 +23,7 @@ export default function CreatePost() {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const navigate = useNavigate()
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -121,6 +123,7 @@ export default function CreatePost() {
       if (res.ok) {
         setLoading(false);
         setError(false);
+        navigate(`/post/${data.slug}`)
       }
     } catch (error) {
       setError(error.message);
