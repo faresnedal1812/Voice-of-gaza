@@ -17,6 +17,7 @@ import { GiTeamUpgrade } from "react-icons/gi";
 export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
+  const [roleRequestsCount, setRoleRequestsCount] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -42,6 +43,27 @@ export default function DashSidebar() {
       console.log(error.message);
     }
   };
+
+  console.log(roleRequestsCount);
+
+  useEffect(() => {
+    if (currentUser.role === "admin") {
+      const fetchRoleRequests = async () => {
+        try {
+          const res = await fetch("/api/roleRequest/role-requests");
+          const data = await res.json();
+          if (!res.ok) {
+            return;
+          } else {
+            setRoleRequestsCount(data.length);
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+      fetchRoleRequests();
+    }
+  }, [currentUser]);
 
   return (
     <Sidebar className="w-full">
@@ -88,7 +110,15 @@ export default function DashSidebar() {
                 icon={GiTeamUpgrade}
                 as={"div"}
               >
-                <Link to={"/dashboard?tab=role-requests"}>Role requests</Link>
+                <Link
+                  to={"/dashboard?tab=role-requests"}
+                  className="flex items-center justify-between"
+                >
+                  Role requests{" "}
+                  <span className="bg-red-500 text-white text-sm font-medium rounded-full px-[6px]">
+                    {roleRequestsCount}
+                  </span>
+                </Link>
               </SidebarItem>
             </>
           )}

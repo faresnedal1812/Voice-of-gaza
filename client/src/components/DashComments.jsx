@@ -196,7 +196,7 @@ export default function DashComments() {
                       <TableCell className="font-medium truncate">
                         {comment.content}
                       </TableCell>
-                      <TableCell className="font-medium truncate">
+                      <TableCell className="font-medium truncate text-center">
                         {comment.likes.length}
                       </TableCell>
                       <TableCell className="font-medium truncate">

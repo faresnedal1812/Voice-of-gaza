@@ -460,7 +460,7 @@ export default function Header() {
                 placeholder="Enter your email..."
                 color="info"
                 className="text-teal-900 rounded-none border-none outline-none"
-                defaultValue={currentUser && currentUser.email}
+                // defaultValue={currentUser && currentUser.email}
                 required
                 onChange={handleChange}
               />
