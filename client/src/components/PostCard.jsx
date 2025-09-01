@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import { useSelector } from "react-redux";
 
 export default function PostCard({ post }) {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <div className="bg-gray-300 group relative h-[370px] md:w-[350px] w-[310px] border border-gray-500 hover:border-2 overflow-hidden rounded-lg transition-all">
       <Link to={`/post/${post.slug}`}>
@@ -34,27 +36,30 @@ export default function PostCard({ post }) {
           >
             Read article
           </Link>
-          <div className="flex flex-1 flex-col items-start text-sm">
-            <Link
-              to={`/update-post/${post._id}`}
-              className="text-green-600 hover:underline flex gap-1 items-center"
-            >
-              <FiEdit />
-              Edit
-            </Link>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                if (typeof post.onDelete === "function") {
-                  post.onDelete(post._id);
-                }
-              }}
-              className="text-red-600 hover:underline flex gap-1 items-center"
-            >
-              <MdClose />
-              Delete
-            </button>
-          </div>
+          {(currentUser.role == "admin" ||
+            currentUser._id === post.authorId) && (
+            <div className="flex flex-1 flex-col items-start text-sm">
+              <Link
+                to={`/update-post/${post._id}`}
+                className="text-green-600 hover:underline flex gap-1 items-center"
+              >
+                <FiEdit />
+                Edit
+              </Link>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (typeof post.onDelete === "function") {
+                    post.onDelete(post._id);
+                  }
+                }}
+                className="text-red-600 hover:underline flex gap-1 items-center"
+              >
+                <MdClose />
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
