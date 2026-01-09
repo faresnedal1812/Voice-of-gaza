@@ -62,7 +62,7 @@ export default function About() {
             </p>
           </div>
         </div>
-        <Link to={"/home"} className="w-fit">
+        <Link to={"/"} className="w-fit">
           <Button
             size="sm"
             className="cursor-pointer flex items-center gap-1 bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 text-white hover:bg-gradient-to-br focus:ring-teal-300 dark:focus:ring-teal-800"
