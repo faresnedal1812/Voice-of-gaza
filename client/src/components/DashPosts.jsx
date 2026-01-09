@@ -23,7 +23,7 @@ export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
-  const [authors, setAuthors] = useState({});
+  // const [authors, setAuthors] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [postIdToBeDeleted, setPostIdToBeDeleted] = useState(null);
   const [searchData, setSearchData] = useState({});
@@ -64,7 +64,7 @@ export default function DashPosts() {
       }
     };
     fetchPosts();
-  }, [currentUser._id, location.search]);
+  }, [currentUser._id, location.search, searchData]);
 
   const handleChange = (e) => {
     if (e.target.id === "title") {
@@ -98,26 +98,26 @@ export default function DashPosts() {
     }
   };
 
-  useEffect(() => {
-    const uniqueAuthorIds = [...new Set(posts.map((post) => post.authorId))];
+  // useEffect(() => {
+  //   const uniqueAuthorIds = [...new Set(posts.map((post) => post.authorId))];
 
-    uniqueAuthorIds.forEach((authorId) => {
-      if (!authors[authorId]) {
-        getAuthorById(authorId);
-      }
-    });
-  }, [posts]);
+  //   uniqueAuthorIds.forEach((authorId) => {
+  //     if (!authors[authorId]) {
+  //       getAuthorById(authorId);
+  //     }
+  //   });
+  // }, [posts]);
 
-  const getAuthorById = async (authorId) => {
-    const res = await fetch(`/api/user/getUsers?userId=${authorId}`);
-    const data = await res.json();
-    if (!res.ok) {
-      return;
-    }
-    if (res.ok && data.users.length > 0) {
-      setAuthors({ ...authors, [authorId]: data.users[0] });
-    }
-  };
+  // const getAuthorById = async (authorId) => {
+  //   const res = await fetch(`/api/user/getUsers?userId=${authorId}`);
+  //   const data = await res.json();
+  //   if (!res.ok) {
+  //     return;
+  //   }
+  //   if (res.ok && data.users.length > 0) {
+  //     setAuthors({ ...authors, [authorId]: data.users[0] });
+  //   }
+  // };
 
   const handleShowMore = async () => {
     try {
@@ -254,7 +254,7 @@ export default function DashPosts() {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {authors[post.authorId]?.username || "Loading..."}
+                    {post.authorId?.username || "Loading..."}
                   </TableCell>
                   <TableCell className="truncate">
                     {post.title.length > 35
@@ -262,8 +262,12 @@ export default function DashPosts() {
                       : post.title}
                   </TableCell>
                   <TableCell>{post.category}</TableCell>
-                  <TableCell className="text-center mt-3">{post.commentsCount}</TableCell>
-                  <TableCell className="mt-3 text-center">{post.views}</TableCell>
+                  <TableCell className="text-center mt-3">
+                    {post.commentsCount}
+                  </TableCell>
+                  <TableCell className="mt-3 text-center">
+                    {post.views}
+                  </TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1 items-center">
                       <Link to={`/update-post/${post._id}`}>

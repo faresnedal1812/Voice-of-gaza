@@ -293,6 +293,7 @@ export const getPosts = async (req, res, next) => {
 
     const [posts, totalPosts, lastMonthPosts] = await Promise.all([
       Post.find(query)
+        .populate("authorId")
         .sort({ [sortField]: sortDirection })
         .skip(startIndex)
         .limit(limit),
