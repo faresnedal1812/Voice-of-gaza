@@ -118,7 +118,10 @@ export default function Header() {
       if (!res.ok) {
         return;
       }
-      setUnreadCount((prev) => prev - 1);
+      setUnreadCount((prev) => {
+        if (prev === 0) prev = 0;
+        prev - 1;
+      });
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
           notification._id === notificationId
@@ -244,7 +247,7 @@ export default function Header() {
               <div className="relative">
                 <MdOutlineNotificationsActive className="text-3xl cursor-pointer" />
                 <span className="absolute top-[-13px] right-0 text-xs bg-red-500 rounded-full px-1 text-white font-medium">
-                  {unreadCount}
+                  {unreadCount || 0}
                 </span>
               </div>
             }
